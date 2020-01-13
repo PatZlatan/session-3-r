@@ -1,0 +1,116 @@
+---
+title: "session 3"
+author: "Patrice"
+date: "1/13/2020"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+
+mobile <- read_csv("https://raw.githubusercontent.com/vmandela99/Class-assignment-12th-july-2019/master/mobilemoney_data.csv")
+
+skimr::skim(mobile)
+
+summary(mobile)
+
+
+```
+
+The data has 28 variables and agent trust has 1051 missing values. Highest grade has 256 missing values.
+
+skim::skim(mobile)
+the mean hhid is 1597, the mean weight is 443.16, mean age is 37.67
+
+```{r}
+#how many account type are there:
+mobile %>% count(account_type,sort = T)
+
+```
+ Using of %>% is like Then
+list of account, we have 7 accounts type
+Using <-= assign it to 
+to read, use .csv older version, and _csv with the newest version 
+
+
+Which distrits has many people?
+```{r}
+# getr the number of people
+mobile %>% count(district, sort = T)
+```
+District_C with 856
+
+
+  How many count types are there?
+```{r}
+mobile %>% count(account_type)
+
+mobile %>% count(account_type) %>% ggplot(aes(x = account_type, y = n)) + geom_col() # to put the result in graph
+
+```
+  
+  
+  
+what percentage of people from district_A have sacco account?
+in the entire data 5.9% are from district A and have sacco account
+```{r}
+mobile %>% count(district) %>% mutate(percent = n/sum(n)*100) 
+
+mobile %>% count(district, account_type) %>% mutate(percent = n/sum(n)*100) 
+
+mobile %>% filter(district == "District_A") %>% count(account_type) %>% mutate(percent = n/sum(n)*100)
+
+mobile %>% filter(district == "District_A") %>% count(account_type) %>%  mutate(percent = n/sum(n)*100) %>% ggplot (aes(x = account_type, y = n)) + geom_col(fill = "Blue")
+# to put a color just add on geom_col(fill = Color)
+
+#there we extract District_A by district == district_A, 
+# so from people with sacco Acc they are 18.2 percent
+
+View(mobile)
+
+```
+
+take data, mutate create a new column, put the percentage- n/sum * 100
+district A have 32.5
+
+How many grades completed are there?
+```{r}
+mobile %>% count(highest_grade_completed, sort = T)
+```
+
+
+What is the largest weight in the survey?
+```{r}
+which.max(mobile$weight)
+#
+```
+
+
+
+What percentage of people are in university and have mobile money account?
+
+```{r}
+mobile %>% count(highest_grade_completed, account_type) %>% mutate(percent = n/sum(n)*100) 
+
+mobile %>% filter(highest_grade_completed == "university") %>% count(account_type) %>% mutate(percent = n/sum(n)*100)
+
+mobile %>% filter(highest_grade_completed == "university") %>% count(account_type == "Mobile Money") 
+
+
+mobile %>% filter(highest_grade_completed == "university") %>% count(account_type == "Mobile Money") %>% mutate(percent = n/sum(n)*100)
+
+
+```
+
+
+
